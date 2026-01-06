@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Monster Battle - Inventar</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      height: 100vh;
+      margin: 0;
+      background-color: #1e1e2f;
+      color: white;
+      padding-top: 50px;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+    }
+
+    .inventory {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 30px;
+    }
+
+    .slot {
+      width: 80px;
+      height: 120px;
+      border: 2px solid #4caf50;
+      border-radius: 10px;
+      background-color: #2a2a3f;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .slot:hover {
+      border-color: #45a049;
+      background-color: #35354f;
+    }
+
+    .button {
+      padding: 10px 20px;
+      background-color: #4caf50;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .button:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<body>
+  <h1>Inventar</h1>
+  <div class="inventory" id="inventory">
+    <div class="slot" data-slot="1">Leer</div>
+    <div class="slot" data-slot="2">Leer</div>
+    <div class="slot" data-slot="3">Leer</div>
+    <div class="slot" data-slot="4">Leer</div>
+    <div class="slot" data-slot="5">Leer</div>
+  </div>
+  <button class="button" id="backBtn">Zurück</button>
+
+  <script>
+    // Slots aus localStorage laden (falls vorhanden)
+    const inventorySlots = JSON.parse(localStorage.getItem('inventory')) || ["Leer","Leer","Leer","Leer","Leer"];
+    const slots = document.querySelectorAll('.slot');
+
+    slots.forEach((slot, index) => {
+      slot.textContent = inventorySlots[index];
+
+      // Klick auf Slot (später: Monster ansehen/Level up)
+      slot.addEventListener('click', () => {
+        alert(`Slot ${index+1}: ${inventorySlots[index]}`);
+      });
+    });
+
+    // Zurück-Button
+    document.getElementById('backBtn').addEventListener('click', () => {
+      window.location = 'index.html'; // zurück zum Startscreen
+    });
+  </script>
+</body>
+</html>
