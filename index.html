@@ -44,18 +44,17 @@
 
   <script>
     // Punktestand aus localStorage laden oder 0 setzen
-    let score = localStorage.getItem('score') || 0;
+    let score = parseInt(localStorage.getItem('score')) || 0;
     document.getElementById('score').textContent = score;
 
-    // Angriff-Button Klick
+    // Angriff-Button Klick → battle.html
     document.getElementById('attackBtn').addEventListener('click', () => {
-      alert('Hier geht es bald in den Kampf!');
-      // Später: window.location = 'battle.html';
+      window.location = 'battle.html';
     });
 
-    // Inventar-Button Klick
+    // Inventar-Button Klick → inventory.html
     document.getElementById('inventoryBtn').addEventListener('click', () => {
-      window.location = 'inventory.html'; // direkt ins Inventar
+      window.location = 'inventory.html';
     });
   </script>
 </body>
