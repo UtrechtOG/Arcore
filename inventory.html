@@ -36,7 +36,8 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 14px;
+      flex-direction: column;
+      font-size: 12px;
       cursor: pointer;
       transition: 0.2s;
     }
@@ -64,31 +65,60 @@
 <body>
   <h1>Inventar</h1>
   <div class="inventory" id="inventory">
+    <div class="slot" data-slot="0">Elf</div>
     <div class="slot" data-slot="1">Leer</div>
     <div class="slot" data-slot="2">Leer</div>
     <div class="slot" data-slot="3">Leer</div>
     <div class="slot" data-slot="4">Leer</div>
-    <div class="slot" data-slot="5">Leer</div>
   </div>
   <button class="button" id="backBtn">Zurück</button>
 
   <script>
-    // Slots aus localStorage laden (falls vorhanden)
-    const inventorySlots = JSON.parse(localStorage.getItem('inventory')) || ["Leer","Leer","Leer","Leer","Leer"];
+    // Inventar speichern
+    const inventoryData = [
+      {
+        name: "Elf",
+        hp: 100,
+        attacks: [
+          {name: "Icespike", type: "damage", value: 7},
+          {name: "Frost", type: "freeze", value: 2}, // friert Gegner 2 Runden ein
+          {name: "Lowkick", type: "damageChance", value: 4, chance: 0.2, crit: 10},
+          {name: "Heal", type: "heal", value: 10}
+        ]
+      },
+      null,
+      null,
+      null,
+      null
+    ];
+
+    // localStorage speichern
+    localStorage.setItem('inventoryData', JSON.stringify(inventoryData));
+
+    // Slots anzeigen
     const slots = document.querySelectorAll('.slot');
-
     slots.forEach((slot, index) => {
-      slot.textContent = inventorySlots[index];
+      const data = inventoryData[index];
+      if(data){
+        slot.textContent = data.name;
+      } else {
+        slot.textContent = "Leer";
+      }
 
-      // Klick auf Slot (später: Monster ansehen/Level up)
+      // Klick auf Slot
       slot.addEventListener('click', () => {
-        alert(`Slot ${index+1}: ${inventorySlots[index]}`);
+        if(data){
+          let attacksText = data.attacks.map(a => `${a.name}`).join(", ");
+          alert(`${data.name}\nAttacken: ${attacksText}`);
+        } else {
+          alert("Leer");
+        }
       });
     });
 
     // Zurück-Button
     document.getElementById('backBtn').addEventListener('click', () => {
-      window.location = 'index.html'; // zurück zum Startscreen
+      window.location = 'index.html';
     });
   </script>
 </body>
