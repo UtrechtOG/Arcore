@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Monster Battle Game</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #1e1e2f;
+      color: white;
+    }
+
+    .button {
+      padding: 15px 30px;
+      margin: 10px;
+      background-color: #4caf50;
+      border: none;
+      border-radius: 8px;
+      font-size: 18px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .button:hover {
+      background-color: #45a049;
+    }
+
+    .score {
+      font-size: 24px;
+      margin-bottom: 30px;
+    }
+  </style>
+</head>
+<body>
+  <div class="score">Punkte: <span id="score">0</span></div>
+  <button class="button" id="attackBtn">Angriff</button>
+  <button class="button" id="inventoryBtn">Inventar</button>
+
+  <script>
+    // Punktestand aus localStorage laden oder 0 setzen
+    let score = localStorage.getItem('score') || 0;
+    document.getElementById('score').textContent = score;
+
+    // Angriff-Button Klick
+    document.getElementById('attackBtn').addEventListener('click', () => {
+      alert('Hier geht es bald in den Kampf!');
+      // Später: window.location = 'battle.html';
+    });
+
+    // Inventar-Button Klick
+    document.getElementById('inventoryBtn').addEventListener('click', () => {
+      alert('Hier öffnet sich dein Inventar!');
+      // Später: window.location = 'inventory.html';
+    });
+  </script>
+</body>
+</html>
