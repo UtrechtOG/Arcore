@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Monster Battle - Kampf</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background-color: #1e1e2f;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      height: 100vh;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .battlefield {
+      position: relative;
+      width: 600px;
+      height: 300px;
+      margin-bottom: 20px;
+      border: 2px solid #4caf50;
+      border-radius: 10px;
+      background-color: #2a2a3f;
+    }
+
+    .monster {
+      position: absolute;
+      width: 100px;
+      height: 140px;
+      background-color: #3a3a5f;
+      border: 3px solid #00f; /* Blau leuchtend */
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      font-weight: bold;
+    }
+
+    .player {
+      left: 20px;
+      bottom: 20px;
+    }
+
+    .enemy {
+      right: 20px;
+      top: 20px;
+    }
+
+    .hp-bar {
+      width: 80%;
+      height: 10px;
+      background-color: red;
+      margin-bottom: 5px;
+      border-radius: 5px;
+      overflow: hidden;
+    }
+
+    .hp-fill {
+      height: 100%;
+      background-color: green;
+      width: 100%;
+    }
+
+    .attack-buttons {
+      display: grid;
+      grid-template-columns: repeat(2, 140px);
+      grid-gap: 10px;
+      margin-top: 20px;
+    }
+
+    .button {
+      padding: 10px;
+      background-color: #4caf50;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .button:hover {
+      background-color: #45a049;
+    }
+
+    .timer {
+      margin-top: 10px;
+      font-size: 16px;
+    }
+
+    .score-display {
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="score-display">Punkte: <span id="score">0</span></div>
+  <div class="battlefield">
+    <div class="monster player" id="playerMonster">
+      <div class="hp-bar"><div class="hp-fill" id="playerHp"></div></div>
+      <div id="playerName">Spieler</div>
+      <div id="playerHPText">100 / 100</div>
+    </div>
+    <div class="monster enemy" id="enemyMonster">
+      <div class="hp-bar"><div class="hp-fill" id="enemyHp"></div></div>
+      <div id="enemyName">Gegner</div>
+      <div id="enemyHPText">100 / 100</div>
+    </div>
+  </div>
+  <div class="attack-buttons">
+    <button class="button" id="atk1">Attacke 1</button>
+    <button class="button" id="atk2">Attacke 2</button>
+    <button class="button" id="atk3">Attacke 3</button>
+    <button class="button" id="atk4">Attacke 4</button>
+  </div>
+  <div class="timer" id="timer">30s</div>
+
+  <script>
+    // Punkte aus localStorage
+    let score = parseInt(localStorage.getItem('score')) || 0;
+    document.getElementById('score').textContent = score;
+
+    // Monster Daten
+    class Monster {
+      constructor(name) {
+        this.name = name;
+        this.hp = 100;
+        this.attacks = ["Schlag","Tritt","Feuer","Wasser"];
+      }
+      attack() {
+        return this.attacks[Math.floor(Math.random()*this.attacks.length)];
+      }
+      takeDamage(amount) {
+        this.hp -= amount;
+        if (this.hp < 0) this.hp = 0;
+      }
+    }
+
+    // Spieler und Gegner
+    let playerMonsters = [new Monster("Player1"), new Monster("Player2")];
+    let enemyMonsters = [new Monster("Enemy1"), new Monster("Enemy2")];
+    let currentPlayer = playerMonsters[0];
+    let currentEnemy = enemyMonsters[0];
+
+    const playerHpFill = document.getElementById("playerHp");
+    const enemyHpFill = document.getElementById("enemyHp");
+    const playerHPText = document.getElementById("playerHPText");
+    const enemyHPText = document.getElementById("enemyHPText");
+
+    function updateHP() {
+      playerHpFill.style.width = currentPlayer.hp + "%";
+      enemyHpFill.style.width = currentEnemy.hp + "%";
+      playerHPText.textContent = currentPlayer.hp + " / 100";
+      enemyHPText.textContent = currentEnemy.hp + " / 100";
+    }
+
+    updateHP();
+
+    // Timer
+    let turnTime = 30;
+    let timerEl = document.getElementById("timer");
+    let turnInterval;
+
+    function startTurn() {
+      turnTime = 30;
+      timerEl.textContent = turnTime + "s";
+      clearInterval(turnInterval);
+      turnInterval = setInterval(() => {
+        turnTime--;
+        timerEl.textContent = turnTime + "s";
+        if (turnTime <= 0) {
+          clearInterval(turnInterval);
+          playerAttack(currentPlayer.attack());
+        }
+      }, 1000);
+    }
+
+    // Spieler Angriff
+    function playerAttack(attackName) {
+      clearInterval(turnInterval);
+      let dmg = Math.floor(Math.random() * 20) + 5; // 5-24 Schaden
+      currentEnemy.takeDamage(dmg);
+      updateHP();
+      checkMonsterDeath();
+      if(currentEnemy.hp>0){
+        setTimeout(enemyTurn, 500);
+      }
+    }
+
+    // Gegnerzug
+    function enemyTurn() {
+      let attackName = currentEnemy.attack();
+      let dmg = Math.floor(Math.random() * 20) + 5;
+      currentPlayer.takeDamage(dmg);
+      updateHP();
+      checkMonsterDeath();
+      if(currentPlayer.hp>0){
+        startTurn();
+      }
+    }
+
+    // Überprüfung Monster tot
+    function checkMonsterDeath() {
+      if(currentEnemy.hp <= 0){
+        enemyMonsters.shift();
+        if(enemyMonsters.length >0){
+          currentEnemy = enemyMonsters[0];
+          currentEnemy.hp = 100;
+          updateHP();
+        } else {
+          endBattle(true);
+        }
+      }
+      if(currentPlayer.hp <= 0){
+        playerMonsters.shift();
+        if(playerMonsters.length >0){
+          currentPlayer = playerMonsters[0];
+          currentPlayer.hp = 100;
+          updateHP();
+          startTurn();
+        } else {
+          endBattle(false);
+        }
+      }
+    }
+
+    // Kampf Ende
+    function endBattle(playerWon){
+      let pointsChange = 0;
+      if(playerWon){
+        pointsChange = Math.floor(Math.random()*5)+3; // 3-7
+        alert("Gewonnen! +" + pointsChange + " Punkte");
+      } else {
+        pointsChange = Math.floor(Math.random()*10)+5; // 5-14
+        alert("Verloren! -" + pointsChange + " Punkte");
+        pointsChange = -pointsChange;
+      }
+      score += pointsChange;
+      if(score<0) score = 0;
+      localStorage.setItem('score',score);
+      document.getElementById('score').textContent = score;
+      window.location = "index.html";
+    }
+
+    // Attacken Buttons
+    document.getElementById("atk1").addEventListener("click",()=>playerAttack(currentPlayer.attacks[0]));
+    document.getElementById("atk2").addEventListener("click",()=>playerAttack(currentPlayer.attacks[1]));
+    document.getElementById("atk3").addEventListener("click",()=>playerAttack(currentPlayer.attacks[2]));
+    document.getElementById("atk4").addEventListener("click",()=>playerAttack(currentPlayer.attacks[3]));
+
+    // Start der ersten Runde
+    startTurn();
+  </script>
+</body>
+</html>
