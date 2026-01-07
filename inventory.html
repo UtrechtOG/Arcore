@@ -21,7 +21,10 @@
 
     .inventory {
       display: flex;
+      flex-wrap: wrap;
       gap: 15px;
+      justify-content: center;
+      max-width: 900px;
       margin-bottom: 30px;
     }
 
@@ -47,6 +50,7 @@
     .card-name {
       font-weight: bold;
       margin-bottom: 5px;
+      text-align: center;
     }
 
     .card-hp {
@@ -62,6 +66,7 @@
       padding: 15px;
       background-color: #2a2a3f;
       display: none;
+      margin-bottom: 20px;
     }
 
     .details h2 {
@@ -106,7 +111,7 @@
     const inventoryDiv = document.getElementById("inventory");
     const detailsDiv = document.getElementById("details");
 
-    // Karten anzeigen
+    // Alle Karten anzeigen
     cards.forEach((card, index) => {
       const cardDiv = document.createElement("div");
       cardDiv.className = "card";
