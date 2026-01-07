@@ -2,97 +2,115 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Startscreen</title>
 <style>
-body {
+/* --------------------- Grundlayout --------------------- */
+* {
+  box-sizing: border-box;
   margin: 0;
-  font-family: sans-serif;
-  background-color: #1e1e2f;
+  padding: 0;
+}
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: radial-gradient(circle at top, #0a0a15, #1a1a2f);
   color: white;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px;
+  justify-content: space-between;
+  min-height: 100vh;
+  overflow: hidden; /* kein Scrollen */
 }
 
-/* Obere Leiste */
+/* --------------------- Obere Leiste --------------------- */
 #topbar {
-  width: 100%;
+  width: 90%;
+  max-width: 600px;
   display: flex;
   justify-content: space-between;
-  margin-bottom: 40px;
+  margin-top: 20px;
 }
 
 .user-box, .exp-box {
-  background-color: #2a2a3f;
-  border: 2px solid #4caf50;
-  padding: 10px 15px;
-  border-radius: 10px;
+  background-color: #1f1f35;
+  border-radius: 15px;
+  padding: 12px 20px;
   font-weight: bold;
+  text-align: center;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.5), 0 0 8px rgba(76,255,76,0.4);
+  transform: translateZ(0);
 }
 
-/* Liga-Kasten */
-#liga-box {
-  width: 300px;
-  height: 120px;
-  background-color: #2a2a3f;
-  border: 2px solid #4caf50;
-  border-radius: 12px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 20px;
-}
-
-#liga-box h2 {
-  margin: 0 0 10px 0;
-}
-
-/* Ladebalken */
+/* --------------------- Fortschritt / Balken --------------------- */
 #progress-container {
   width: 80%;
-  height: 20px;
-  background-color: #35354f;
-  border-radius: 10px;
+  max-width: 400px;
+  height: 25px;
+  background-color: #2a2a3f;
+  border-radius: 15px;
   overflow: hidden;
-  margin-bottom: 20px;
+  margin-top: 50px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.5);
 }
 
 #progress-bar {
   height: 100%;
   width: 0%;
-  background-color: #4caf50;
+  background: linear-gradient(90deg, #4caf50, #6cff6c);
+  border-radius: 15px;
+  transition: width 0.4s ease-in-out;
+  box-shadow: 0 0 10px #4caf50;
 }
 
-/* Buttons */
+/* --------------------- Buttons --------------------- */
 button {
-  padding: 15px 30px;
-  font-size: 18px;
-  border-radius: 10px;
   border: none;
+  border-radius: 15px;
   cursor: pointer;
-  margin-bottom: 10px;
   font-weight: bold;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+  outline: none;
 }
 
+/* Kampf-Button */
 #battle-btn {
-  background-color: #4caf50;
+  padding: 15px 45px;
+  font-size: 22px;
+  background: linear-gradient(145deg, #4caf50, #6cff6c);
   color: black;
+  margin-top: 40px;
 }
 
 #battle-btn:hover {
-  background-color: #6cff6c;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 15px rgba(0,0,0,0.6), 0 0 15px #6cff6c;
 }
 
+/* Inventar-Button */
 #inventory-btn {
-  background-color: #2a2a3f;
+  padding: 10px 35px;
+  font-size: 16px;
+  background: linear-gradient(145deg, #2a2a3f, #1b1b2f);
   color: white;
-  font-size: 14px;
+  margin-bottom: 30px;
 }
 
 #inventory-btn:hover {
-  background-color: #35354f;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 12px rgba(0,0,0,0.5), 0 0 10px #4caf50;
+}
+
+/* --------------------- Zentrum Layout --------------------- */
+#center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  width: 100%;
 }
 </style>
 </head>
@@ -104,57 +122,50 @@ button {
   <div class="exp-box" id="exp-box">Erfahrung: 0</div>
 </div>
 
-<!-- Liga-Kasten -->
-<div id="liga-box">
-  <h2 id="liga-text">Liga 1</h2>
+<!-- Zentrum -->
+<div id="center">
+  <!-- Fortschritt Balken -->
   <div id="progress-container">
     <div id="progress-bar"></div>
   </div>
+
+  <!-- Buttons -->
+  <button id="battle-btn">Kampf</button>
+  <button id="inventory-btn">Inventar</button>
 </div>
 
-<!-- Buttons -->
-<button id="battle-btn">Kampf</button>
-<button id="inventory-btn">Inventar</button>
-
 <script>
-// ----------- Erfahrung & Liga -----------
+// --------------------- Erfahrung ---------------------
 let experience = parseInt(localStorage.getItem("experience")) || 0;
-const ligaText = document.getElementById("liga-text");
-const progressBar = document.getElementById("progress-bar");
 const expBox = document.getElementById("exp-box");
+const progressBar = document.getElementById("progress-bar");
 
-// Liga Grenzen
-const ligaLimits = [0, 150, 500, 1000, 1700, 2500, 3700];
-const ligaNames = ["Liga 1","Liga 2","Liga 3","Liga 4","Liga 5","Liga 6","Liga 7"];
-
-function updateLiga() {
+function updateProgress() {
   expBox.innerText = "Erfahrung: " + experience;
-
-  // Finde aktuelle Liga
-  let ligaIndex = 0;
-  for(let i=0;i<ligaLimits.length;i++){
-    if(experience >= ligaLimits[i]) ligaIndex = i;
-  }
-  ligaText.innerText = ligaNames[ligaIndex];
-
-  // Berechne Fortschritt innerhalb der Liga
-  const currentMin = ligaLimits[ligaIndex];
-  const currentMax = ligaLimits[ligaIndex+1] || ligaLimits[ligaLimits.length-1];
-  let progress = ((experience - currentMin)/(currentMax - currentMin))*100;
+  const maxExp = 100; // temporär, Liga kommt später
+  let progress = (experience / maxExp) * 100;
+  if(progress > 100) progress = 100;
   progressBar.style.width = progress + "%";
 }
 
-updateLiga();
+updateProgress();
 
-// ----------- Button Events -----------
+function addExperience(amount){
+  experience += amount;
+  if(experience < 0) experience = 0;
+  localStorage.setItem("experience", experience);
+  updateProgress();
+}
+
+// --------------------- Button Events ---------------------
 document.getElementById("battle-btn").onclick = () => {
-  window.location = "battle.html";
+  // Test: zufällig 3-7 Erfahrung
+  addExperience(Math.floor(Math.random()*5)+3);
 }
 
 document.getElementById("inventory-btn").onclick = () => {
   window.location = "inventory.html";
 }
 </script>
-
 </body>
 </html>
