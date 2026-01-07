@@ -2,19 +2,17 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <title>Monster Battle - Inventar</title>
+  <title>Inventar</title>
   <style>
     body {
+      margin: 0;
       font-family: sans-serif;
+      background-color: #1e1e2f;
+      color: white;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: flex-start;
-      height: 100vh;
-      margin: 0;
-      background-color: #1e1e2f;
-      color: white;
-      padding-top: 50px;
+      padding-top: 40px;
     }
 
     h1 {
@@ -27,99 +25,121 @@
       margin-bottom: 30px;
     }
 
-    .slot {
-      width: 80px;
-      height: 120px;
+    .card {
+      width: 110px;
+      height: 160px;
       border: 2px solid #4caf50;
       border-radius: 10px;
       background-color: #2a2a3f;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      flex-direction: column;
-      font-size: 12px;
       cursor: pointer;
       transition: 0.2s;
     }
 
-    .slot:hover {
-      border-color: #45a049;
+    .card:hover {
       background-color: #35354f;
+      border-color: #6cff6c;
     }
 
-    .button {
+    .card-name {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .card-hp {
+      font-size: 12px;
+      opacity: 0.8;
+    }
+
+    .details {
+      width: 90%;
+      max-width: 400px;
+      border: 2px solid #4caf50;
+      border-radius: 10px;
+      padding: 15px;
+      background-color: #2a2a3f;
+      display: none;
+    }
+
+    .details h2 {
+      margin-top: 0;
+    }
+
+    .attack {
+      font-size: 14px;
+      margin-bottom: 5px;
+    }
+
+    button {
+      margin-top: 20px;
       padding: 10px 20px;
-      background-color: #4caf50;
-      border: none;
-      border-radius: 8px;
       font-size: 16px;
+      border-radius: 8px;
+      border: none;
       cursor: pointer;
-      transition: 0.2s;
+      background-color: #4caf50;
+      color: black;
     }
 
-    .button:hover {
-      background-color: #45a049;
+    button:hover {
+      background-color: #6cff6c;
     }
   </style>
 </head>
 <body>
+
   <h1>Inventar</h1>
-  <div class="inventory" id="inventory">
-    <div class="slot" data-slot="0">Elf</div>
-    <div class="slot" data-slot="1">Leer</div>
-    <div class="slot" data-slot="2">Leer</div>
-    <div class="slot" data-slot="3">Leer</div>
-    <div class="slot" data-slot="4">Leer</div>
-  </div>
-  <button class="button" id="backBtn">Zurück</button>
+
+  <div class="inventory" id="inventory"></div>
+
+  <div class="details" id="details"></div>
+
+  <button onclick="goBack()">Zurück</button>
+
+  <!-- Karten-Daten -->
+  <script src="cards.js"></script>
 
   <script>
-    // Inventar speichern
-    const inventoryData = [
-      {
-        name: "Elf",
-        hp: 100,
-        attacks: [
-          {name: "Icespike", type: "damage", value: 7},
-          {name: "Frost", type: "freeze", value: 2}, // friert Gegner 2 Runden ein
-          {name: "Lowkick", type: "damageChance", value: 4, chance: 0.2, crit: 10},
-          {name: "Heal", type: "heal", value: 10}
-        ]
-      },
-      null,
-      null,
-      null,
-      null
-    ];
+    const inventoryDiv = document.getElementById("inventory");
+    const detailsDiv = document.getElementById("details");
 
-    // localStorage speichern
-    localStorage.setItem('inventoryData', JSON.stringify(inventoryData));
+    // Karten anzeigen
+    cards.forEach((card, index) => {
+      const cardDiv = document.createElement("div");
+      cardDiv.className = "card";
 
-    // Slots anzeigen
-    const slots = document.querySelectorAll('.slot');
-    slots.forEach((slot, index) => {
-      const data = inventoryData[index];
-      if(data){
-        slot.textContent = data.name;
-      } else {
-        slot.textContent = "Leer";
-      }
+      cardDiv.innerHTML = `
+        <div class="card-name">${card.name}</div>
+        <div class="card-hp">HP: ${card.hp}</div>
+      `;
 
-      // Klick auf Slot
-      slot.addEventListener('click', () => {
-        if(data){
-          let attacksText = data.attacks.map(a => `${a.name}`).join(", ");
-          alert(`${data.name}\nAttacken: ${attacksText}`);
-        } else {
-          alert("Leer");
-        }
+      cardDiv.onclick = () => showDetails(card);
+      inventoryDiv.appendChild(cardDiv);
+    });
+
+    function showDetails(card) {
+      detailsDiv.style.display = "block";
+
+      let attacksHtml = "";
+      card.attacks.forEach(a => {
+        attacksHtml += `<div class="attack">• ${a.name}</div>`;
       });
-    });
 
-    // Zurück-Button
-    document.getElementById('backBtn').addEventListener('click', () => {
-      window.location = 'index.html';
-    });
+      detailsDiv.innerHTML = `
+        <h2>${card.name}</h2>
+        <p>HP: ${card.hp}</p>
+        <h3>Attacken</h3>
+        ${attacksHtml}
+      `;
+    }
+
+    function goBack() {
+      window.location = "index.html";
+    }
   </script>
+
 </body>
 </html>
