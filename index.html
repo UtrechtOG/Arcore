@@ -1,61 +1,160 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <title>Monster Battle Game</title>
-  <style>
-    body {
-      font-family: sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      margin: 0;
-      background-color: #1e1e2f;
-      color: white;
-    }
+<meta charset="UTF-8">
+<title>Startscreen</title>
+<style>
+body {
+  margin: 0;
+  font-family: sans-serif;
+  background-color: #1e1e2f;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
 
-    .button {
-      padding: 15px 30px;
-      margin: 10px;
-      background-color: #4caf50;
-      border: none;
-      border-radius: 8px;
-      font-size: 18px;
-      cursor: pointer;
-      transition: 0.2s;
-    }
+/* Obere Leiste */
+#topbar {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 40px;
+}
 
-    .button:hover {
-      background-color: #45a049;
-    }
+.user-box, .exp-box {
+  background-color: #2a2a3f;
+  border: 2px solid #4caf50;
+  padding: 10px 15px;
+  border-radius: 10px;
+  font-weight: bold;
+}
 
-    .score {
-      font-size: 24px;
-      margin-bottom: 30px;
-    }
-  </style>
+/* Liga-Kasten */
+#liga-box {
+  width: 300px;
+  height: 120px;
+  background-color: #2a2a3f;
+  border: 2px solid #4caf50;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+#liga-box h2 {
+  margin: 0 0 10px 0;
+}
+
+/* Ladebalken */
+#progress-container {
+  width: 80%;
+  height: 20px;
+  background-color: #35354f;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+#progress-bar {
+  height: 100%;
+  width: 0%;
+  background-color: #4caf50;
+}
+
+/* Buttons */
+button {
+  padding: 15px 30px;
+  font-size: 18px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+#battle-btn {
+  background-color: #4caf50;
+  color: black;
+}
+
+#battle-btn:hover {
+  background-color: #6cff6c;
+}
+
+#inventory-btn {
+  background-color: #2a2a3f;
+  color: white;
+  font-size: 14px;
+}
+
+#inventory-btn:hover {
+  background-color: #35354f;
+}
+</style>
 </head>
 <body>
-  <div class="score">Punkte: <span id="score">0</span></div>
-  <button class="button" id="attackBtn">Angriff</button>
-  <button class="button" id="inventoryBtn">Inventar</button>
 
-  <script>
-    // Punktestand aus localStorage laden oder 0 setzen
-    let score = parseInt(localStorage.getItem('score')) || 0;
-    document.getElementById('score').textContent = score;
+<!-- Obere Leiste -->
+<div id="topbar">
+  <div class="user-box">User#00001</div>
+  <div class="exp-box" id="exp-box">Erfahrung: 0</div>
+</div>
 
-    // Angriff-Button Klick → battle.html
-    document.getElementById('attackBtn').addEventListener('click', () => {
-      window.location = 'battle.html';
-    });
+<!-- Liga-Kasten -->
+<div id="liga-box">
+  <h2 id="liga-text">Liga 1</h2>
+  <div id="progress-container">
+    <div id="progress-bar"></div>
+  </div>
+</div>
 
-    // Inventar-Button Klick → inventory.html
-    document.getElementById('inventoryBtn').addEventListener('click', () => {
-      window.location = 'inventory.html';
-    });
-  </script>
+<!-- Buttons -->
+<button id="battle-btn">Kampf</button>
+<button id="inventory-btn">Inventar</button>
+
+<script>
+// ----------- Erfahrung & Liga -----------
+let experience = parseInt(localStorage.getItem("experience")) || 0;
+const ligaText = document.getElementById("liga-text");
+const progressBar = document.getElementById("progress-bar");
+const expBox = document.getElementById("exp-box");
+
+// Liga Grenzen
+const ligaLimits = [0, 150, 500, 1000, 1700, 2500, 3700];
+const ligaNames = ["Liga 1","Liga 2","Liga 3","Liga 4","Liga 5","Liga 6","Liga 7"];
+
+function updateLiga() {
+  expBox.innerText = "Erfahrung: " + experience;
+
+  // Finde aktuelle Liga
+  let ligaIndex = 0;
+  for(let i=0;i<ligaLimits.length;i++){
+    if(experience >= ligaLimits[i]) ligaIndex = i;
+  }
+  ligaText.innerText = ligaNames[ligaIndex];
+
+  // Berechne Fortschritt innerhalb der Liga
+  const currentMin = ligaLimits[ligaIndex];
+  const currentMax = ligaLimits[ligaIndex+1] || ligaLimits[ligaLimits.length-1];
+  let progress = ((experience - currentMin)/(currentMax - currentMin))*100;
+  progressBar.style.width = progress + "%";
+}
+
+updateLiga();
+
+// ----------- Button Events -----------
+document.getElementById("battle-btn").onclick = () => {
+  window.location = "battle.html";
+}
+
+document.getElementById("inventory-btn").onclick = () => {
+  window.location = "inventory.html";
+}
+</script>
+
 </body>
 </html>
