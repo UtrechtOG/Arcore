@@ -1,102 +1,47 @@
-/* startscreen.css - Game UI Startscreen Design */
+/* startscreen.css - einfacher Startscreen mit leichtem 3D Effekt */
 
-/* ---------------------- */
-/* Grundlayout & Hintergrund */
-/* ---------------------- */
+/* Grundlayout */
 body {
   margin: 0;
   font-family: 'Segoe UI', sans-serif;
-  background-color: #000; /* Schwarz */
+  background-color: #0a0a15; /* dunkler, mystischer Hintergrund */
   color: white;
   display: flex;
   flex-direction: column;
   align-items: center;
   min-height: 100vh;
-  overflow: hidden;
-  position: relative;
+  padding: 20px;
 }
 
-/* Mystisches lila Raster */
-body::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background-image: linear-gradient(#5e00ff22 1px, transparent 1px),
-                    linear-gradient(90deg, #5e00ff22 1px, transparent 1px);
-  background-size: 50px 50px;
-  z-index: 0;
-  animation: moveGrid 20s linear infinite;
-  opacity: 0.4;
-}
-
-@keyframes moveGrid {
-  0% { background-position: 0 0, 0 0; }
-  100% { background-position: 100px 100px, 100px 100px; }
-}
-
-/* ---------------------- */
-/* Obere Leiste (Username + Erfahrung) */
-/* ---------------------- */
+/* Obere Leiste */
 #topbar {
   width: 90%;
-  max-width: 900px;
+  max-width: 600px;
   display: flex;
   justify-content: space-between;
-  margin: 20px 0;
-  z-index: 1;
-  position: relative;
+  margin-bottom: 40px;
 }
 
 .user-box, .exp-box {
-  background: linear-gradient(145deg, #2a2a3f, #1b1b2f);
-  border: 2px solid #4caf50;
-  border-radius: 15px;
+  background-color: #1f1f35;
+  border-radius: 12px;
   padding: 10px 20px;
   font-weight: bold;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.5), 0 0 10px rgba(76,255,76,0.5);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.5), 0 0 8px rgba(76,255,76,0.4);
   text-align: center;
-}
-
-/* ---------------------- */
-/* Liga-Kasten (Mitte) */
-/* ---------------------- */
-#liga-box {
-  width: 320px;
-  height: 150px;
-  background: linear-gradient(145deg, #2b2b4b, #1b1b35);
-  border: 3px solid #4caf50;
-  border-radius: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  margin: 30px 0;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.6), 0 0 20px #4caf50;
-  position: relative;
-  animation: pulseBox 2s ease-in-out infinite alternate;
-}
-
-@keyframes pulseBox {
-  0% { box-shadow: 0 10px 20px rgba(0,0,0,0.6), 0 0 20px #4caf50; }
-  100% { box-shadow: 0 15px 25px rgba(0,0,0,0.6), 0 0 30px #6cff6c; }
-}
-
-#liga-text {
-  margin: 0;
-  font-size: 24px;
-  font-weight: bold;
-  text-shadow: 0 0 10px #4caf50;
+  transform: translateZ(0); /* kleiner 3D Effekt */
 }
 
 /* Fortschrittsbalken */
 #progress-container {
   width: 80%;
+  max-width: 400px;
   height: 20px;
-  background-color: #35354f;
+  background-color: #2a2a3f;
   border-radius: 10px;
   overflow: hidden;
-  margin-top: 15px;
+  margin-bottom: 30px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.5);
 }
 
 #progress-bar {
@@ -104,45 +49,43 @@ body::before {
   width: 0%;
   background: linear-gradient(90deg, #4caf50, #6cff6c);
   border-radius: 10px;
-  transition: width 0.5s ease-in-out;
-  box-shadow: 0 0 10px #4caf50;
+  transition: width 0.4s ease-in-out;
+  box-shadow: 0 0 8px #4caf50;
 }
 
-/* ---------------------- */
-/* Buttons (Unten) */
-/* ---------------------- */
+/* Buttons */
 button {
   border: none;
-  border-radius: 15px;
+  border-radius: 12px;
   cursor: pointer;
   font-weight: bold;
   transition: all 0.2s ease-in-out;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.5);
 }
 
 /* Kampf-Button */
 #battle-btn {
-  padding: 15px 40px;
-  font-size: 22px;
+  padding: 12px 35px;
+  font-size: 20px;
   background: linear-gradient(145deg, #4caf50, #6cff6c);
   color: black;
   margin-bottom: 15px;
 }
 
 #battle-btn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.7), 0 0 20px #6cff6c;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.6), 0 0 12px #6cff6c;
 }
 
 /* Inventar-Button */
 #inventory-btn {
-  padding: 10px 30px;
+  padding: 8px 30px;
   font-size: 16px;
   background: linear-gradient(145deg, #2a2a3f, #1b1b2f);
   color: white;
 }
 
 #inventory-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(0,0,0,0.5), 0 0 15px #4caf50;
-  }
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.5), 0 0 10px #4caf50;
+}
