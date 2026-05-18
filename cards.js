@@ -1,6 +1,4 @@
-// cards.js – alle Karten im Spiel (20 Karten, funktional)
 const cards = [
-  // --- Alte 5 Karten ---
   {
     name: "Elf",
     hp: 100,
@@ -215,5 +213,4 @@ const cards = [
   }
 ];
 
-// Offline speichern
 localStorage.setItem("inventoryData", JSON.stringify(cards));
