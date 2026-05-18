@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Startscreen</title>
 <style>
-/* --------------------- Grundlayout --------------------- */
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -21,10 +21,9 @@ body {
   align-items: center;
   justify-content: space-between;
   min-height: 100vh;
-  overflow: hidden; /* kein Scrollen */
+  overflow: hidden; 
 }
 
-/* --------------------- Obere Leiste --------------------- */
 #topbar {
   width: 90%;
   max-width: 600px;
@@ -44,7 +43,7 @@ body {
   font-size: 14px;
 }
 
-/* --------------------- Zentrum Layout --------------------- */
+
 #center {
   display: flex;
   flex-direction: column;
@@ -54,7 +53,7 @@ body {
   width: 100%;
 }
 
-/* --------------------- Liga-Bereich --------------------- */
+
 #liga-container {
   width: 80%;
   max-width: 400px;
@@ -88,7 +87,7 @@ body {
   box-shadow: 0 0 8px #4caf50;
 }
 
-/* --------------------- Buttons --------------------- */
+
 button {
   border: none;
   border-radius: 12px;
@@ -100,7 +99,7 @@ button {
   margin-top: 15px;
 }
 
-/* Kampf-Button */
+
 #battle-btn {
   padding: 10px 35px;
   font-size: 18px;
@@ -113,7 +112,7 @@ button {
   box-shadow: 0 6px 12px rgba(0,0,0,0.6), 0 0 12px #6cff6c;
 }
 
-/* Inventar-Button */
+
 #inventory-btn {
   padding: 8px 25px;
   font-size: 14px;
@@ -129,15 +128,14 @@ button {
 </head>
 <body>
 
-<!-- Obere Leiste -->
+
 <div id="topbar">
   <div class="user-box">User#00001</div>
   <div class="exp-box" id="exp-box">Erfahrung: 0</div>
 </div>
 
-<!-- Zentrum -->
+
 <div id="center">
-  <!-- Liga Anzeige -->
   <div id="liga-container">
     <div id="liga-name">Liga 1</div>
     <div id="liga-bar-container">
@@ -145,25 +143,23 @@ button {
     </div>
   </div>
 
-  <!-- Buttons -->
   <button id="battle-btn">Kampf</button>
   <button id="inventory-btn">Inventar</button>
 </div>
 
 <script>
-// --------------------- Erfahrung & Liga ---------------------
+  
 let experience = parseInt(localStorage.getItem("experience")) || 0;
 const expBox = document.getElementById("exp-box");
 const ligaName = document.getElementById("liga-name");
 const ligaBar = document.getElementById("liga-bar");
 
-const ligaLimits = [0,250,500,750,1000,1250,1500]; // 7 Ligen
+const ligaLimits = [0,250,500,750,1000,1250,1500]; 
 const ligaTitles = ["Liga 1","Liga 2","Liga 3","Liga 4","Liga 5","Liga 6","Liga 7"];
 
 function updateLiga() {
   expBox.innerText = "Erfahrung: " + experience;
 
-  // aktuelle Liga bestimmen
   let ligaIndex = ligaLimits.length-1;
   for(let i=0;i<ligaLimits.length;i++){
     if(experience < ligaLimits[i]) {
@@ -175,7 +171,6 @@ function updateLiga() {
 
   ligaName.innerText = ligaTitles[ligaIndex];
 
-  // Fortschrittsbalken
   const currentMin = ligaLimits[ligaIndex];
   const currentMax = ligaLimits[ligaIndex+1] || ligaLimits[ligaLimits.length-1]+250;
   let progress = ((experience - currentMin)/(currentMax - currentMin))*100;
@@ -185,9 +180,8 @@ function updateLiga() {
 
 updateLiga();
 
-// --------------------- Button Events ---------------------
 document.getElementById("battle-btn").onclick = () => {
-  // Kampf starten
+  
   window.location = "battle.html";
 }
 
