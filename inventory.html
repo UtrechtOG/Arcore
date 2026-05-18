@@ -104,14 +104,12 @@
 
   <button onclick="goBack()">Zurück</button>
 
-  <!-- Karten-Daten -->
   <script src="cards.js"></script>
 
   <script>
     const inventoryDiv = document.getElementById("inventory");
     const detailsDiv = document.getElementById("details");
-
-    // Alle Karten anzeigen
+    
     cards.forEach((card, index) => {
       const cardDiv = document.createElement("div");
       cardDiv.className = "card";
