@@ -82,7 +82,7 @@ body {
 
 <script src="cards.js"></script>
 <script>
-/* ---------- SETUP ---------- */
+  
 let score = parseInt(localStorage.getItem("score")) || 0;
 
 function clone(card) {
@@ -109,7 +109,6 @@ let enemyStatus = {};
 let playerTurn = true;
 let timer = 30;
 
-/* ---------- RENDER ---------- */
 const playerDiv = document.getElementById("playerCard");
 const enemyDiv = document.getElementById("enemyCard");
 const actionsDiv = document.getElementById("actions");
@@ -137,7 +136,6 @@ function render() {
 
 render();
 
-/* ---------- TIMER ---------- */
 setInterval(() => {
   if (!playerTurn) return;
   timer--;
@@ -151,8 +149,7 @@ function resetTimer() {
   timer = 30;
   timerDiv.innerText = timer;
 }
-
-/* ---------- ATTACK LOGIC ---------- */
+  
 function useAttack(attack) {
   resetTimer();
   applyAttack(player, enemy, attack, enemyStatus);
@@ -183,7 +180,6 @@ function applyAttack(attacker, target, attack, targetStatus) {
   }
 }
 
-/* ---------- TURN FLOW ---------- */
 function endTurn() {
   if (enemy.currentHp <= 0) nextEnemy();
   playerTurn = false;
@@ -207,7 +203,6 @@ function enemyTurn() {
   render();
 }
 
-/* ---------- NEXT CARDS ---------- */
 function nextEnemy() {
   if (enemyDeck.length === 0) return win();
   enemy = enemyDeck.shift();
@@ -222,7 +217,6 @@ function nextPlayer() {
   playerStatus = {};
 }
 
-/* ---------- END GAME ---------- */
 function win() {
   const gain = Math.floor(Math.random() * 5) + 3;
   localStorage.setItem("score", score + gain);
